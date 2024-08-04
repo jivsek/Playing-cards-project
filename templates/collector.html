@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Collector{% endblock %}
+
+{% block content %}
+<h2>{{ collector['ime'] }} {{ collector['priimek'] }}</h2>
+<p>Email: {{ collector['eposta'] }}</p>
+<h3>Cards</h3>
+<ul>
+    {% for card in cards %}
+    <li>
+        {{ card['id_karta'] }} - {{ card['ime'] }} - {{ card['cena'] }}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
