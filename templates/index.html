@@ -4,10 +4,18 @@
 
 {% block content %}
 <h2>All Cards</h2>
+<div>
+    <a href="{{ url_for('index', sort_by='ime', order='asc') }}">Ime Ascending</a> |
+    <a href="{{ url_for('index', sort_by='ime', order='desc') }}">Ime Descending</a> |
+    <a href="{{ url_for('index', sort_by='zaloga', order='asc') }}">Zaloga Ascending</a> |
+    <a href="{{ url_for('index', sort_by='zaloga', order='desc') }}">Zaloga Descending</a> |
+    <a href="{{ url_for('index', sort_by='cena', order='asc') }}">Cena Ascending</a> |
+    <a href="{{ url_for('index', sort_by='cena', order='desc') }}">Cena Descending</a>
+</div>
 <ul>
     {% for card in cards %}
     <li>
-        {{ card['id_karta'] }} - <b>{{ card['ime'] }}</b> - Na zalogi: {{ card['zaloga'] }} - {{ card['cena'] }}
+        {{ card['id_karta'] }} - <b>{{ card['ime'] }}</b> - {{ card['zaloga'] }} - {{ card['cena'] }}
     </li>
     {% endfor %}
 </ul>

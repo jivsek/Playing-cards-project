@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import sqlite3
 
 app = Flask(__name__)
@@ -10,10 +10,18 @@ def get_db_connection():
 
 @app.route('/')
 def index():
+    sort_by = request.args.get('sort_by')
+    order = request.args.get('order', 'asc')
+    
+    if sort_by not in ['ime', 'zaloga', 'cena']:
+        sort_by = 'ime'
+    if order not in ['asc', 'desc']:
+        order = 'asc'
+    
     conn = get_db_connection()
-    cards = conn.execute('SELECT * FROM KARTA').fetchall()
+    cards = conn.execute(f'SELECT * FROM KARTA ORDER BY {sort_by} {order}').fetchall()
     conn.close()
-    return render_template('index.html', cards=cards)
+    return render_template('index.html', cards=cards, sort_by=sort_by, order=order)
 
 @app.route('/collectors')
 def collectors():
