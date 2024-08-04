@@ -4,8 +4,10 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
-from extract_data import extract_product_data
 import re
+import time
+import sqlite3
+from db.karta import Karta
 
 # Set up Chrome options
 chrome_options = Options()
@@ -29,20 +31,62 @@ cookies = {
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-driver.get("https://www.cardmarket.com/en/Pokemon/Products/Singles?idCategory=51&idExpansion=0&idRarity=0&sortBy=name_asc&perSite=20")
 
-html_content = driver.page_source
-soup = BeautifulSoup(html_content, 'html.parser')
-table_body = soup.find('div', class_='table-body')
+def extract_product_data(row):
+    
+    # Extract image url
+    img_tag = row.find('span', class_='thumbnail-icon')
+    img_url = None
+    if img_tag:
+        img_url = re.search(r'src="(.*?)"', img_tag['aria-label']).group(1)
 
-product_rows = table_body.find_all('div', id=re.compile(r'^productRow\d+'))
+    # Extract card name
+    product_name_tag = row.find('div', {'class': 'col-10 col-md-8 px-2 flex-column align-items-start justify-content-center'})
+    product_name = product_name_tag.find('a').text.strip() if product_name_tag else None
+    
+    # Extract availability number
+    availability_tag = row.find('div', {'class': 'col-availability px-2'})
+    availability_number = availability_tag.find('span', {'class': 'd-none d-md-inline'}).text.strip() if availability_tag else None
 
-products = [extract_product_data(row) for row in product_rows]
+    # Extract price
+    price_tag = row.find('div', {'class': 'col-price pe-sm-2'})
+    price = price_tag.text.strip() if price_tag else None
 
-for product in products:
-    print(f"Image URL: {product['img_src']}")
-    print(f"Product Name: {product['product_name']}")
-    print(f"Availability Number: {product['availability_number']}")
-    print(f"Price: {product['price']}")
-    print("-" * 20)
+    product = {
+        'img_src': img_url,
+        'product_name': product_name,
+        'availability': availability_number,
+        'price': price,
+    }
+    
+    return product
 
+
+def scrape_data():
+
+    karta = Karta()
+    karta.create_table()
+
+    for i in range(1,15):
+        base_url = 'https://www.cardmarket.com/en/Pokemon/Products/Singles?idCategory=51&idExpansion=0&idRarity=0'
+        url = f'{base_url}&site={i}'
+        driver.get(url)
+        
+        time.sleep(2)
+
+        html_content = driver.page_source
+        soup = BeautifulSoup(html_content, 'html.parser')
+        table_body = soup.find('div', class_='table-body')
+
+        product_rows = table_body.find_all('div', id=re.compile(r'^productRow\d+'))
+
+        products = [extract_product_data(row) for row in product_rows]
+
+        for product in products:
+            karta.insert_data(product['product_name'], product['availability'], product['price'], product['img_src'])
+            print(f"Inserted: {product['product_name']}")
+
+    driver.quit()
+    
+if __name__=="__main__":
+    scrape_data()
