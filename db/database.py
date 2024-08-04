@@ -13,6 +13,12 @@ class Database:
             cursor.execute(query)
         conn.commit()
         conn.close()
+        
+    def execute_many(self, query, params_list):
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
+        cursor.executemany(query, params_list)
+        conn.commit()
 
     def fetch_query(self, query, params=None):
         conn = sqlite3.connect(self.db_name)
@@ -24,3 +30,4 @@ class Database:
         result = cursor.fetchall()
         conn.close()
         return result
+    
