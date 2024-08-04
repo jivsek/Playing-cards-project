@@ -4,6 +4,8 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
+from extract_data import extract_product_data
+import re
 
 # Set up Chrome options
 chrome_options = Options()
@@ -30,22 +32,17 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 driver.get("https://www.cardmarket.com/en/Pokemon/Products/Singles?idCategory=51&idExpansion=0&idRarity=0&sortBy=name_asc&perSite=20")
 
 html_content = driver.page_source
-
-# Use BeautifulSoup to parse the HTML
 soup = BeautifulSoup(html_content, 'html.parser')
-
-# Extract the div with class 'table-body'
 table_body = soup.find('div', class_='table-body')
 
-print(table_body)
+product_rows = table_body.find_all('div', id=re.compile(r'^productRow\d+'))
 
-for product in product_elements:
-    title_element = product.find_element(By.CSS_SELECTOR, 'a')
-    title = title_element.text
-    print(title)
+products = [extract_product_data(row) for row in product_rows]
 
-# Close the browser
-driver.quit()
-
-
+for product in products:
+    print(f"Image URL: {product['img_src']}")
+    print(f"Product Name: {product['product_name']}")
+    print(f"Availability Number: {product['availability_number']}")
+    print(f"Price: {product['price']}")
+    print("-" * 20)
 
