@@ -1,22 +1,69 @@
-{% extends 'base.html' %}
+<!-- index.html -->
+{% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Card List{% endblock %}
 
 {% block content %}
-<h2>All Cards</h2>
 <div>
-    <a href="{{ url_for('index', sort_by='ime', order='asc') }}">Ime Ascending</a> |
-    <a href="{{ url_for('index', sort_by='ime', order='desc') }}">Ime Descending</a> |
-    <a href="{{ url_for('index', sort_by='zaloga', order='asc') }}">Zaloga Ascending</a> |
-    <a href="{{ url_for('index', sort_by='zaloga', order='desc') }}">Zaloga Descending</a> |
-    <a href="{{ url_for('index', sort_by='cena', order='asc') }}">Cena Ascending</a> |
-    <a href="{{ url_for('index', sort_by='cena', order='desc') }}">Cena Descending</a>
+    <form action="/add_card" method="post" class="add-card-form">
+        <h2>Add New Card</h2>
+        <label for="product_name">Card Name:</label>
+        <input type="text" id="product_name" name="product_name" required>
+        
+        <label for="availability">Availability:</label>
+        <input type="number" id="availability" name="availability" required>
+        
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price" required>
+        
+        <label for="img_src">Image URL:</label>
+        <input type="text" id="img_src" name="img_src">
+        
+        <button type="submit">Add Card</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flash-messages">
+        {% for message in messages %}
+                {{ message }}   
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+
+    <form action="/" method="get">
+        <input type="text" name="search" placeholder="Search for a card..." value="{{ request.args.get('search', '') }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="sorting">
+        <form method="get">
+            <label for="sort_by">Sort by:</label>
+            <select name="sort_by" id="sort_by">
+                <option value="ime" {% if sort_by == 'ime' %}selected{% endif %}>Name</option>
+                <option value="zaloga" {% if sort_by == 'zaloga' %}selected{% endif %}>Availability</option>
+                <option value="cena" {% if sort_by == 'cena' %}selected{% endif %}>Price</option>
+            </select>
+            <select name="order" id="order">
+                <option value="asc" {% if order == 'asc' %}selected{% endif %}>Ascending</option>
+                <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descending</option>
+            </select>
+            <button type="submit">Sort</button>
+        </form>
+    </div>
+
+    <ul class="card-list">
+        {% for card in cards %}
+        <li class="card-item">
+            <img src="{{ url_for('proxy_image') }}?url={{ card.slika }}" alt="{{ card.ime }}">
+            <div class="card-info">
+                <h3>{{ card.ime }}</h3>
+                <p>Availability: {{ card.ime }}</p>
+                <p>Price: {{ card.cena }}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
 </div>
-<ul>
-    {% for card in cards %}
-    <li>
-        {{ card['id_karta'] }} - <b>{{ card['ime'] }}</b> - {{ card['zaloga'] }} - {{ card['cena'] }}
-    </li>
-    {% endfor %}
-</ul>
 {% endblock %}

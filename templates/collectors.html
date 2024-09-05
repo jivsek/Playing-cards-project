@@ -7,9 +7,9 @@
 <ul>
     {% for collector in collectors %}
     <li>
-        <a href="{{ url_for('collector', id=collector['id_zbiratelj']) }}">
+        <p>{{ collector['id_zbiratelj'] }} - <a href="{{ url_for('collector', id=collector['id_zbiratelj']) }}">
             {{ collector['ime'] }} {{ collector['priimek'] }}
-        </a>
+        </a></p>
     </li>
     {% endfor %}
 </ul>

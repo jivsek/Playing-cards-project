@@ -2,9 +2,34 @@
 
 {% block title %}Collector{% endblock %}
 
+
+
 {% block content %}
+
 <h2>{{ collector['ime'] }} {{ collector['priimek'] }}</h2>
 <p>Email: {{ collector['eposta'] }}</p>
+
+<form action="/transfer_card" method="post" class="transfer-card-form">
+    <h2>Transfer card</h2>
+    <label for="card_id">Card id:</label>
+    <input type="number" id="card_id" name="card_id" required>
+    
+    <label for="new_collector_id">Collector id (recieving the card):</label>
+    <input type="number" id="new_collector_id" name="new_collector_id" required>
+  
+    <button type="submit">Transfer card</button>
+</form>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+            {{ message }}   
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 <h3>Cards</h3>
 <ul>
     {% for card in cards %}

@@ -11,7 +11,7 @@ class Karta(Database):
                 ime VARCHAR(255) NOT NULL,
                 zaloga INT NOT NULL,
                 cena INT NOT NULL,
-                slika VARCHAR(255) NOT NULL
+                slika VARCHAR(255)
                 );
                 """
         self.execute_query(create_table_query)
