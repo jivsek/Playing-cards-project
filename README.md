@@ -5,7 +5,7 @@ Na spletni strani potem prikaže seznam vseh kart, zbirateljev ter karte v njiho
 
 ## Kako pognati projekt
 
-1. Priporočljivo: ustvari virtualenv `python -m venv myenv` in ga aktiviraj `.\venv\Scripts\activate`
+1. Priporočljivo: ustvari virtualenv `python -m venv venv` in ga aktiviraj `.\venv\Scripts\activate`
 2. Naloži vse potrebne pakete `pip install -r requirements.txt`
 3. Poženi `main.py`. Ta pripravi tabele, scrape-a in generira podatke ter zapolni tabele.
 4. Poženi `app.py`
