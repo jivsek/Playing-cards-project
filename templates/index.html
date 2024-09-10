@@ -1,6 +1,7 @@
 <!-- index.html -->
 {% extends "base.html" %}
 
+
 {% block title %}Card List{% endblock %}
 
 {% block content %}
@@ -59,7 +60,7 @@
             <img src="{{ url_for('proxy_image') }}?url={{ card.slika }}" alt="{{ card.ime }}">
             <div class="card-info">
                 <h3>{{ card.ime }}</h3>
-                <p>Availability: {{ card.ime }}</p>
+                <p>Availability: {{ card.zaloga }}</p>
                 <p>Price: {{ card.cena }}</p>
             </div>
         </li>
