@@ -1,6 +1,6 @@
-from db.zbiratelj import Zbiratelj
-from db.karta import Karta
-from db.zbiratelj_karta import ZbirateljKarta
+from models.zbiratelj import Zbiratelj
+from models.karta import Karta
+from models.zbiratelj_karta import ZbirateljKarta
 
 def prepare_tables():
     

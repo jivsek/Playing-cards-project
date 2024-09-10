@@ -1,5 +1,5 @@
-from db.zbiratelj import Zbiratelj
-from db.zbiratelj_karta import ZbirateljKarta
+from models.zbiratelj import Zbiratelj
+from models.zbiratelj_karta import ZbirateljKarta
 
 def populate_tables():
     

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import re
 import time
 import sqlite3
-from db.karta import Karta
+from models.karta import Karta
 
 # Set up Chrome options
 chrome_options = Options()
