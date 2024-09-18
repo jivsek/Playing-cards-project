@@ -15,9 +15,9 @@ Podatkovna baza je sestavljena iz naslednjih tabel:
 +----------------+          +------------------+          +-------------------+
 |    KARTA       |          |  ZBIRATELJ_KARTA |          |     ZBIRATELJ     |
 +----------------+          +------------------+          +-------------------+
-| id_karta (PK)  |---+      | id_zbiratelj (PK)|>--+      | id_zbiratelj (PK) |
-| ime            |   |      | id_karta         |   |      | ime               |
-| zaloga         |   +----< |                  |   +-----+| priimek           |
+| id_karta (PK)  |---+      | id (PK)          |>--+      | id_zbiratelj (PK) |
+| ime            |   |      | id_karta (FK)    |   |      | ime               |
+| zaloga         |   +----< | id_zbiratelj (FK)|   +-----+| priimek           |
 | cena           |          |                  |          | eposta            |
 | slika          |          +------------------+          +-------------------+
 +----------------+
