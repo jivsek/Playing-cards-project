@@ -33,3 +33,7 @@ Zgenerirano z ChatGPT
 
 Spletna stran na `http://127.0.0.1:5000`
 
+## Tekstovni vmesnik (CLI)
+
+Za uporabo tekstovnega vmesnika, zaženite datoteko `text_interface.py`
+
